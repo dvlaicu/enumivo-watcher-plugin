@@ -2,12 +2,12 @@
  *  @file 
  *  @copyright eosauthority - free to use and modify - see LICENSE.txt
  */
-#include <eosio/watcher_plugin/watcher_plugin.hpp>
-#include <eosio/watcher_plugin/http_async_client.hpp>
-#include <eosio/chain/controller.hpp>
-#include <eosio/chain/trace.hpp>
-#include <eosio/chain_plugin/chain_plugin.hpp>
-#include <eosio/chain/block_state.hpp>
+#include <enumivo/watcher_plugin/watcher_plugin.hpp>
+#include <enumivo/watcher_plugin/http_async_client.hpp>
+#include <enumivo/chain/controller.hpp>
+#include <enumivo/chain/trace.hpp>
+#include <enumivo/chain_plugin/chain_plugin.hpp>
+#include <enumivo/chain/block_state.hpp>
 
 #include <fc/io/json.hpp>
 #include <fc/network/url.hpp>
@@ -18,7 +18,7 @@
 #include <unordered_map>
 
 
-namespace eosio {
+namespace enumivo {
    static appbase::abstract_plugin& _watcher_plugin = app().register_plugin<watcher_plugin>();
 
    using namespace chain;
@@ -170,7 +170,7 @@ namespace eosio {
    void watcher_plugin::plugin_initialize(const variables_map& options) {
 
       try {
-         EOS_ASSERT(options.count("watch-receiver-url") == 1, fc::invalid_arg_exception,
+         ENU_ASSERT(options.count("watch-receiver-url") == 1, fc::invalid_arg_exception,
                     "watch_plugin requires one watch-receiver-url to be specified!");
 
          string url_str = options.at("watch-receiver-url").as<string>();
@@ -182,11 +182,11 @@ namespace eosio {
                // TODO: Don't require ':' for watching whole accounts
                std::vector<std::string> v;
                boost::split(v, s, boost::is_any_of(":"));
-               EOS_ASSERT(v.size() == 2, fc::invalid_arg_exception,
+               ENU_ASSERT(v.size() == 2, fc::invalid_arg_exception,
                           "Invalid value ${s} for --watch",
                           ("s", s));
                watcher_plugin_impl::filter_entry fe{v[0], v[1]};
-               EOS_ASSERT(fe.receiver.value, fc::invalid_arg_exception, "Invalid value ${s} for "
+               ENU_ASSERT(fe.receiver.value, fc::invalid_arg_exception, "Invalid value ${s} for "
                                                                         "--watch", ("s", s));
                my->filter_on.insert(fe);
             }
@@ -224,6 +224,6 @@ namespace eosio {
 
 }
 
-FC_REFLECT(eosio::watcher_plugin_impl::action_notif, (tx_id)(account)(name)(authorization)
+FC_REFLECT(enumivo::watcher_plugin_impl::action_notif, (tx_id)(account)(name)(authorization)
    (action_data))
-FC_REFLECT(eosio::watcher_plugin_impl::message, (actions))
+FC_REFLECT(enumivo::watcher_plugin_impl::message, (actions))
